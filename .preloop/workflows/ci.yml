@@ -1,0 +1,25 @@
+name: CI
+on:
+  pull_request:
+  merge_group:
+    types: [checks_requested]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Context
+        run: |
+          echo "event=$GITHUB_EVENT_NAME ref=$GITHUB_REF sha=$GITHUB_SHA base_ref=$GITHUB_BASE_REF head_ref=$GITHUB_HEAD_REF"
+      - name: Test
+        run: |
+          if [ -f fail.txt ]; then
+            echo "intentional failure marker present"
+            exit 1
+          fi
+          if [ -f slow.txt ]; then
+            echo "slow marker present; keeping the run alive for dequeue proof"
+            sleep 300
+          fi
+          echo "tests pass"
