@@ -18,7 +18,7 @@ jobs:
             echo "intentional failure marker present"
             exit 1
           fi
-          if [ -f slow.txt ]; then
+          if [ -f slow.txt ] && [ "$GITHUB_EVENT_NAME" = "merge_group" ]; then
             echo "slow marker present; keeping the run alive for dequeue proof"
             sleep 300
           fi
